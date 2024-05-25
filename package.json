@@ -23,6 +23,7 @@
     "fs": "^0.0.1-security",
     "pg": "^8.11.5",
     "simple-git": "^3.24.0",
+    "tmp-promise": "^3.0.3",
     "yargs": "17.2.1"
   },
   "devDependencies": {
