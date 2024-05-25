@@ -50,11 +50,11 @@ const run = async () => {
     .command({
       command: "lint",
       aliases: ["l"],
-      describe: "Verify that changed .sql files appear in hasura migrations",
+      describe: "Verify that changed .sql files appear in supabase migrations",
       builder: (yargs) => {
         return yargs
-          .option("hasura-dir", {
-            describe: "Path to hasura schema directory",
+          .option("supabase-dir", {
+            describe: "Path to supabase schema directory",
             type: "string",
           })
           .option("diff-base", {
@@ -68,7 +68,7 @@ const run = async () => {
         await runLint({
           name: argv.name as string,
           sourcePath: argv.path as string,
-          hasuraDir: argv["hasura-dir"] as string,
+          supabaseDir: argv["supabase-dir"] as string,
           diffBase: argv["diff-base"] as string,
         });
       },
@@ -119,16 +119,16 @@ const runWatch = async ({ dbUrl, sourcePath, dryRun }: WatchArgs) => {
 interface MigrateArgs {
   name: string;
   sourcePath: string;
-  hasuraDir: string;
-  hasuraDatabaseName: string;
+  supabaseDir: string;
+  supabaseDatabaseName: string;
   diffBase: string;
   dryRun: boolean;
 }
 const runMigrate = async ({
   name,
   sourcePath,
-  hasuraDir,
-  hasuraDatabaseName,
+  supabaseDir,
+  supabaseDatabaseName,
   diffBase,
   dryRun,
 }: MigrateArgs) => {
@@ -142,11 +142,11 @@ const runMigrate = async ({
   console.log(chalk.green("->"), `Found modified files:`);
   console.log(changedFiles);
 
-//   await createHasuraMigration({
+//   await createsupabaseMigration({
 //     name: name,
 //     files: changedFiles,
-//     hasuraDir: hasuraDir,
-//     hasuraDatabaseName: hasuraDatabaseName,
+//     supabaseDir: supabaseDir,
+//     supabaseDatabaseName: supabaseDatabaseName,
 //     dryRun: dryRun,
 //     log: console.log.bind(console),
 //   });
@@ -198,17 +198,17 @@ const runImport = async ({
 interface LintArgs {
   name: string;
   sourcePath: string;
-  hasuraDir: string;
+  supabaseDir: string;
   diffBase: string;
 }
-const runLint = async ({ name, sourcePath, hasuraDir, diffBase }: LintArgs) => {
+const runLint = async ({ name, sourcePath, supabaseDir, diffBase }: LintArgs) => {
   console.log(
     chalk.green("->"),
-    `Linting changed files under ${sourcePath} against migrations in ${hasuraDir}`
+    `Linting changed files under ${sourcePath} against migrations in ${supabaseDir}`
   );
 
   const changedFiles = await getModifiedSqlFiles(sourcePath, diffBase);
-  const migrationFiles = await getMigrationFiles(hasuraDir, diffBase);
+  const migrationFiles = await getMigrationFiles(supabaseDir, diffBase);
 
   if (!changedFiles.length) {
     console.log(chalk.green("->"), `No modified SQL files found. Exiting.`);
